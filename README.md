@@ -1,69 +1,132 @@
-# 本地视频转写 Skill
+# 本地视频转写 Skill / Local Video Transcription Skill
 
-将视频分享链接转成 HTML 文稿。支持抖音、快手、小红书和视频号的解析；首次使用由 agent 引导填写自己的 MiMo API Key、必要的 Cookie 和安装位置。
+把抖音、快手、小红书和视频号的分享链接，在用户自己的电脑上转成可阅读、可保存的 HTML 文稿。
 
-转写程序随 Skill 一起提供。无需服务器或 Docker，数据和登录配置由每位用户在本机管理。解析、下载和提取音频在本机执行；音频会发送到 MiMo，按用户自己的账号用量计费。
+Turn Douyin, Kuaishou, Xiaohongshu, and WeChat Channels share links into readable, saveable HTML transcripts on the user's own computer.
 
-## 安装与使用
+## 功能 / Features
 
-将此 Skill 目录链接发给支持安装 GitHub Skill 的 agent：
+- 固定生成本地 HTML，包含转写正文、原链接、解析后的媒体下载链接、封面链接、作者、作品 ID 和平台实际返回的数据。
+- 支持 Windows 和 macOS；不需要服务器、Docker 或常驻后台服务。
+- 每位用户使用自己的 MiMo API Key 和平台 Cookie，配置保存在本机，不上传到本仓库。
+- 自动准备 Python 虚拟环境和 FFmpeg；首次配置后，后续只需提供视频链接。
+- 默认不覆盖已有 HTML，避免误删之前的文稿。
+
+- Always generates a local HTML report with the transcript, original link, resolved media download links, cover link, author, item ID, and metadata returned by the platform.
+- Supports Windows and macOS without a server, Docker, or background service.
+- Each user supplies their own MiMo API Key and platform cookies. Credentials stay in the local configuration and are never uploaded here.
+- Automatically prepares an isolated Python environment and FFmpeg. After setup, provide only a video link.
+- Existing HTML files are protected from accidental overwrite by default.
+
+## 安装 / Install
+
+将这个 Skill 文件夹交给支持安装 GitHub Skill 的 agent：
+
+Give the Skill folder or this link to an agent that supports GitHub Skill installation:
 
 ```text
 https://github.com/zql15857082982-art/unified-video-transcription-skill/tree/main/skills/video-transcription
 ```
 
-可以这样说：“请安装这个 Skill，按说明帮我在本机配置。我会提供自己的 MiMo Key 和需要的平台 Cookie。” Codex 已实测；WorkBuddy 是否能自动安装取决于其版本，尚未实测。也可下载完整仓库，再让 agent 从本地 Skill 文件夹安装。
+可以这样说：
 
-将完整的 `skills/video-transcription` 文件夹安装到 agent 的技能目录（Codex 为 `~/.codex/skills/video-transcription`），然后说：
+You can say:
 
-> 使用 video-transcription 转写这个视频：视频链接
+> 请安装这个 Skill，按说明帮我在本机配置，然后转写这个视频链接。
+>
+> Install this Skill, help me configure it locally as described, and transcribe this video link.
 
-固定只生成本地 HTML：包括转写正文、原链接、解析后的下载地址、封面链接、作者及平台返回的互动数据。HTML 无额外依赖或模型调用，正文可离线阅读，外部视频链接需联网打开。下载地址可能过期，文档会记录平台提供的到期时间。
+也可以下载仓库后，从 `skills/video-transcription` 文件夹安装。Codex 已在 Windows 上实测；其他 agent 是否支持自动安装，取决于其自身能力。
 
-安装需要 Python 3.10+ 和网络；常见 Windows/macOS 的 FFmpeg 由脚本自动准备。默认程序目录为 `~/.video-transcription`，也可指定其他位置。首次完成配置后，每次只需提供链接。
+You can also clone or download the repository and install the `skills/video-transcription` folder manually. Codex has been tested on Windows; automatic installation support depends on the agent.
 
-凭证获取步骤和安装命令见 [Skill 使用说明](skills/video-transcription/SKILL.md)，包括：
+## 凭证 / Credentials
 
-- 元宝：登录 → 右键“检查” → Network → list → Request Headers → Cookie；没有 list 时先给元宝发几句话。
-- MiMo：登录 [Xiaomi MiMo API 开放平台](https://platform.xiaomimimo.com/) → 控制台 → API Keys。
+### MiMo API Key
 
-不把个人 Key、Cookie、配置或生成的文稿加入开源仓库。
+打开 [Xiaomi MiMo API 开放平台](https://platform.xiaomimimo.com/)，登录小米账号，进入 **控制台 → API Keys**，创建并复制按量调用的 `sk-` API Key。
 
-## 手动安装
+Open the [Xiaomi MiMo API Open Platform](https://platform.xiaomimimo.com/), sign in with a Xiaomi account, go to **Console → API Keys**, and create a pay-as-you-go `sk-` API Key.
 
-在可交互终端执行：
+### 腾讯元宝 Cookie（视频号需要） / Tencent Yuanbao Cookie (required for WeChat Channels)
+
+1. 打开腾讯元宝并登录。
+2. 在页面空白处点 **右键 → 检查**，切换到 **Network（网络）**。
+3. 在下方请求列表点击 **list**。如果没有，保持 Network 打开，给元宝发几句话，再查看新出现的请求。
+4. 在请求详情的 **Headers → Request Headers** 中找到 `Cookie`，复制 `Cookie:` 后面的完整值。
+5. 只在本机安装提示或本机 `config.env` 中填写，不要发到聊天、截图或 GitHub。
+
+1. Open Tencent Yuanbao and sign in.
+2. Right-click the page, choose **Inspect**, and switch to **Network**.
+3. Click a request named **list**. If it is absent, keep Network open and send Yuanbao a few messages, then inspect the new requests.
+4. In **Headers → Request Headers**, find `Cookie` and copy the complete value after `Cookie:`.
+5. Enter it only in the local installer prompt or local `config.env`; never paste it into chat, screenshots, or GitHub.
+
+不需要寻找 `get_parse_result`，也不要复制 `Set-Cookie`。Cookie 过期后重新获取。
+
+Do not search for `get_parse_result` and do not copy `Set-Cookie`. Refresh the Cookie when it expires.
+
+小红书或快手在遇到登录验证、风控或画质限制时，才需要配置对应 Cookie。
+
+Xiaohongshu or Kuaishou cookies are needed only when those platforms require login, trigger risk control, or return limited quality.
+
+## 手动运行 / Manual setup
+
+在可交互终端运行：
+
+Run this in an interactive terminal:
 
 ```text
 python skills/video-transcription/scripts/setup.py --with-yuanbao
 python skills/video-transcription/scripts/run.py "视频链接" --output "文稿.html"
 ```
 
-使用其他目录时，安装命令加 `--install-dir "安装目录"`。重跑安装会保留配置。后台安装前先在该目录准备 `config.env`，然后加 `--non-interactive`。
+默认安装到 `~/.video-transcription`，也可以给安装脚本加 `--install-dir "自定义目录"`。脚本会记住安装位置，后续不重复索要配置。
 
-## 发布与维护
+The default installation directory is `~/.video-transcription`. Add `--install-dir "custom directory"` to choose another location. The installer remembers the location and does not repeatedly ask for credentials.
 
-公开发布时需包含整个 `skills/video-transcription` 目录；不能只发 SKILL.md。仓库尚未发布前，不能把计划中的 GitHub 地址当作可用安装链接。
+配置文件示例见 [config.example.env](config.example.env)。不要把真实 Key、Cookie、配置文件、音频或视频加入 Git。
 
-根目录的 `transcribe.py` 和 `app/` 是开发源文件。修改后执行 `python scripts/package_skill.py` 更新 Skill 中的 runtime，再测试完整安装包。不要发布 `installation.json`、虚拟环境或个人配置。
+See [config.example.env](config.example.env) for the configuration shape. Never commit real keys, cookies, config files, audio, or video files.
 
-## 验证范围
+## 输出内容 / Output
 
-2026-09-09，在 Windows 上从已安装的 Skill 入口实测：自动安装依赖和 FFmpeg → 使用个人元宝 Cookie 解析视频号 → 提取音频 → 使用个人 MiMo Key 转写 → 生成非空文稿，全部成功。也已验证重复安装会保留配置。
+HTML 报告包含：
 
-2026-09-09，补充实测用户提供的小红书和抖音链接：无需额外 Cookie，均成功解析、提取音频、调用 MiMo，并生成包含作者、互动数据和下载链接的 HTML。当前固定仅输出 HTML。
+- 转写正文
+- 原始分享链接
+- 解析后的媒体下载链接和封面链接
+- 作者、作品 ID、获取时间和平台返回的互动数据
+- 下载链接可能的到期时间及使用提示
 
-2026-09-09，快手分享链接也完成真实转写测试：修正动态分享页子域名识别后，无额外 Cookie 成功解析、提取音频、调用 MiMo 并生成 HTML，包含作者和平台返回的播放、点赞、评论等数据。
+The HTML report includes:
 
-四个平台各有真实链接在 Windows 上测试成功；这不代表所有作品均可访问。macOS 和 WorkBuddy 尚未实测，平台接口和登录有效期也可能变化。
+- The transcript
+- The original share link
+- Resolved media and cover links
+- Author, item ID, capture time, and platform-provided interaction data
+- Link expiry information when available and download notes
 
-## 许可
+下载地址可能过期，部分平台的直链需要特定来源或登录状态。HTML 是本地生成的，外部视频链接仍需要联网打开。
 
-MIT，保留原作者版权和许可文本。直接来源、原项目列明的三个参考仓库及依赖许可见 [来源与第三方说明](THIRD_PARTY_NOTICES.md)。
+Resolved media links may expire, and some platforms require a specific referrer or login state. The HTML is generated locally; external media links still require an Internet connection.
 
-## 使用边界
+## 验证范围 / Validation
 
-每位用户使用自己的本地安装目录、MiMo 账号和 Cookie，不连接作者部署的服务。MiMo 转写会消耗该用户的 API 额度；本地配置不上传到本仓库。Cookie 到期后需重新获取。
+2026-09-09 在 Windows 上完成了四个平台的真实链接测试：抖音、小红书、快手、视频号，均成功解析、提取音频、调用 MiMo 并生成 HTML。自动测试 27 项通过。
 
-支持的是可访问的视频分享链接，图文笔记、直播或需要额外权限的内容不保证可用。单次压缩音频上限 22 MiB，提取最长 480 秒、MiMo 请求最长 600 秒。平台调整页面或限制访问时可能失败；AI 转写也可能有错字，应结合原视频校对。
+On 2026-09-09, real links from all four platforms were tested on Windows: Douyin, Xiaohongshu, Kuaishou, and WeChat Channels. All completed parsing, audio extraction, MiMo transcription, and HTML generation. All 27 automated tests passed.
 
-HTML 默认不覆盖已有文件。下载地址可能过期，部分平台的直链需要特定来源或登录态；文档会提示。平台返回的数据只是获取时的快照，并不保证包含所有指标。
+这不保证每个作品都能访问。平台接口、登录状态和风控规则可能变化；AI 转写结果也应结合原视频校对。macOS 和 WorkBuddy 尚未实测。
+
+This does not guarantee that every post will be accessible. Platform APIs, login sessions, and anti-abuse rules may change. Review AI transcripts against the original video. macOS and WorkBuddy have not been tested.
+
+## 来源与许可证 / Sources and licensing
+
+本项目由 [unified-video-parser](https://github.com/zql15857082982-art/unified-video-parser) 的本地版本拆分并修改而来。原项目列明参考了 [douyin-downloader](https://github.com/jiji262/douyin-downloader)、[video-parser](https://github.com/wwwzhouhui/video-parser) 和 [rednote-api](https://github.com/hostinger-bot/rednote-api)。这些项目的许可证、版权声明和核对记录见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) 及 `third_party/`。
+
+This repository was split from and modified from a local version of [unified-video-parser](https://github.com/zql15857082982-art/unified-video-parser). The original project listed [douyin-downloader](https://github.com/jiji262/douyin-downloader), [video-parser](https://github.com/wwwzhouhui/video-parser), and [rednote-api](https://github.com/hostinger-bot/rednote-api) as references. Their licenses, copyright notices, and verification records are included in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) and `third_party/`.
+
+本项目采用 MIT License。外部服务（MiMo、腾讯元宝和视频平台）各自有自己的服务条款。请只处理你有权使用的内容，并自行承担账号、用量和平台合规责任。
+
+This project is released under the MIT License. External services (MiMo, Tencent Yuanbao, and the video platforms) have their own terms. Process only content you are authorized to use and remain responsible for your accounts, usage, and compliance.
