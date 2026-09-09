@@ -20,7 +20,7 @@ Turn Douyin, Kuaishou, Xiaohongshu, and WeChat Channels share links into readabl
 
 ## 安装 / Install
 
-将这个 Skill 文件夹交给支持安装 GitHub Skill 的 agent：
+将这个 Skill 文件夹交给支持从 GitHub 路径安装 Skill 的 agent：
 
 Give the Skill folder or this link to an agent that supports GitHub Skill installation:
 
@@ -110,16 +110,6 @@ The HTML report includes:
 下载地址可能过期，部分平台的直链需要特定来源或登录状态。HTML 是本地生成的，外部视频链接仍需要联网打开。
 
 Resolved media links may expire, and some platforms require a specific referrer or login state. The HTML is generated locally; external media links still require an Internet connection.
-
-## 验证范围 / Validation
-
-2026-09-09 在 Windows 上完成了四个平台的真实链接测试：抖音、小红书、快手、视频号，均成功解析、提取音频、调用 MiMo 并生成 HTML。自动测试 27 项通过。
-
-On 2026-09-09, real links from all four platforms were tested on Windows: Douyin, Xiaohongshu, Kuaishou, and WeChat Channels. All completed parsing, audio extraction, MiMo transcription, and HTML generation. All 27 automated tests passed.
-
-这不保证每个作品都能访问。平台接口、登录状态和风控规则可能变化；AI 转写结果也应结合原视频校对。macOS 和 WorkBuddy 尚未实测。
-
-This does not guarantee that every post will be accessible. Platform APIs, login sessions, and anti-abuse rules may change. Review AI transcripts against the original video. macOS and WorkBuddy have not been tested.
 
 ## 来源与许可证 / Sources and licensing
 

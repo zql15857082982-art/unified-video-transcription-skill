@@ -43,7 +43,7 @@ metadata:
 
 ### 执行安装
 
-使用可用的 Python 执行本 Skill 的脚本，路径要加引号：
+使用可用的 Python 执行本 Skill 的脚本（可从 GitHub 路径安装本目录），路径要加引号：
 
 ```text
 python "<skill-dir>/scripts/setup.py" --install-dir "<install-dir>" --with-yuanbao
