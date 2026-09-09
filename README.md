@@ -113,7 +113,7 @@ Resolved media links may expire, and some platforms require a specific referrer 
 
 ## 来源与许可证 / Sources and licensing
 
-本项目由 [unified-video-parser](https://github.com/zql15857082982-art/unified-video-parser) 的本地版本拆分并修改而来。原项目列明参考了 [douyin-downloader](https://github.com/jiji262/douyin-downloader)、[video-parser](https://github.com/wwwzhouhui/video-parser) 和 [rednote-api](https://github.com/hostinger-bot/rednote-api)。这些项目的许可证、版权声明和核对记录见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) 及 `third_party/`。
+本项目参考了 [unified-video-parser](https://github.com/zql15857082982-art/unified-video-parser)、[douyin-downloader](https://github.com/jiji262/douyin-downloader)、[video-parser](https://github.com/wwwzhouhui/video-parser) 和 [rednote-api](https://github.com/hostinger-bot/rednote-api)。这些项目的许可证、版权声明和核对记录见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) 及 `third_party/`。
 
 This repository was split from and modified from a local version of [unified-video-parser](https://github.com/zql15857082982-art/unified-video-parser). The original project listed [douyin-downloader](https://github.com/jiji262/douyin-downloader), [video-parser](https://github.com/wwwzhouhui/video-parser), and [rednote-api](https://github.com/hostinger-bot/rednote-api) as references. Their licenses, copyright notices, and verification records are included in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) and `third_party/`.
 
