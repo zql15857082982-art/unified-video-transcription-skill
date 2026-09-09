@@ -1,0 +1,17 @@
+.venv/
+__pycache__/
+.pytest_cache/
+*.py[cod]
+config.env
+*.md.tmp
+installation.json
+.env
+.env.*
+*.env
+!config.example.env
+*.html
+*.mp3
+*.mp4
+**/__pycache__/
+**/*.pyc
+dist/
